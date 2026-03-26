@@ -1,0 +1,45 @@
+server:
+  port: 8080
+
+spring:
+  datasource:
+    url: jdbc:mysql://${DB_HOST:mysql}:${DB_PORT:3306}/${DB_NAME:sms_platform}?useUnicode=true&characterEncoding=utf8&serverTimezone=UTC&useSSL=false&allowPublicKeyRetrieval=true
+    username: ${DB_USER:root}
+    password: ${DB_PASSWORD}
+    hikari:
+      maximum-pool-size: ${DB_POOL_MAX:30}
+      minimum-idle: ${DB_POOL_MIN:10}
+
+auth:
+  jwt:
+    secret: ${JWT_SECRET}
+    expire-hours: ${JWT_EXPIRE_HOURS:24}
+
+# disable swagger in production
+springdoc:
+  api-docs:
+    enabled: false
+knife4j:
+  enable: false
+
+logging:
+  level:
+    root: WARN
+    com.borui.sms: INFO
+    com.baomidou.mybatisplus: WARN
+  file:
+    name: /app/logs/sms-admin.log
+  logback:
+    rollingpolicy:
+      max-file-size: 50MB
+      max-history: 30
+      total-size-cap: 2GB
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+  endpoint:
+    health:
+      show-details: never

@@ -1,0 +1,62 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: sms-mysql
+    restart: unless-stopped
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD:-changeme123}
+      MYSQL_DATABASE: sms_platform
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./doc:/docker-entrypoint-initdb.d:ro
+    networks:
+      - sms-net
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  sms-admin:
+    build: ./sms-admin
+    container_name: sms-admin
+    restart: unless-stopped
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_NAME: sms_platform
+      DB_USER: root
+      DB_PASSWORD: ${DB_PASSWORD:-changeme123}
+      JWT_SECRET: ${JWT_SECRET:-BoRuiSmsPlatformJwtSecretKey2024MustBe32BytesLong!}
+      JWT_EXPIRE_HOURS: ${JWT_EXPIRE_HOURS:-24}
+      JAVA_OPTS: "-Xms512m -Xmx1024m"
+    volumes:
+      - app_logs:/app/logs
+    networks:
+      - sms-net
+
+  sms-ui:
+    build: ./sms-ui
+    container_name: sms-ui
+    restart: unless-stopped
+    depends_on:
+      - sms-admin
+    ports:
+      - "${WEB_PORT:-8880}:80"
+    networks:
+      - sms-net
+
+volumes:
+  mysql_data:
+  app_logs:
+
+networks:
+  sms-net:
+    name: sms-platform-net
+    driver: bridge
