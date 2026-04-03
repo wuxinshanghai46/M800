@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import { countryAll, vendorList, channelList, sidList, customerList } from '../api'
+import isoCountries from '../data/countries'
 
 /**
  * Global reference data cache.
@@ -23,7 +24,12 @@ export const useRefData = defineStore('refData', () => {
     if (_loaded.countries && !force) return countries.value
     if (_loading.countries) return _loading.countries
     _loading.countries = countryAll().then(r => {
-      countries.value = r.data || []
+      const raw = r.data || []
+      const localMap = Object.fromEntries(isoCountries.map(c => [c.code, c]))
+      countries.value = raw.map(c => {
+        const local = localMap[c.code]
+        return local ? { ...c, name: local.name, nameEn: local.nameEn } : c
+      })
       _loaded.countries = true
       _loading.countries = null
       return countries.value

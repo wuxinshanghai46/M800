@@ -7,8 +7,10 @@ services:
     restart: unless-stopped
     command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
     environment:
-      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD:-changeme123}
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
       MYSQL_DATABASE: sms_platform
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
     volumes:
       - mysql_data:/var/lib/mysql
       - ./doc:/docker-entrypoint-initdb.d:ro
@@ -31,9 +33,9 @@ services:
       DB_HOST: mysql
       DB_PORT: 3306
       DB_NAME: sms_platform
-      DB_USER: root
-      DB_PASSWORD: ${DB_PASSWORD:-changeme123}
-      JWT_SECRET: ${JWT_SECRET:-BoRuiSmsPlatformJwtSecretKey2024MustBe32BytesLong!}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      JWT_SECRET: ${JWT_SECRET}
       JWT_EXPIRE_HOURS: ${JWT_EXPIRE_HOURS:-24}
       JAVA_OPTS: "-Xms512m -Xmx1024m"
     volumes:
@@ -42,13 +44,15 @@ services:
       - sms-net
 
   sms-ui:
-    build: ./sms-ui
+    build:
+      context: ./sms-ui
+      dockerfile: Dockerfile.prod
     container_name: sms-ui
     restart: unless-stopped
     depends_on:
       - sms-admin
     ports:
-      - "${WEB_PORT:-8880}:80"
+      - "8880:80"
     networks:
       - sms-net
 
@@ -59,7 +63,7 @@ services:
     depends_on:
       - sms-admin
     ports:
-      - "${PORTAL_PORT:-8881}:80"
+      - "8881:80"
     networks:
       - sms-net
 
