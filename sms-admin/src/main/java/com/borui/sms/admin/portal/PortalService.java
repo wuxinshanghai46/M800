@@ -48,6 +48,7 @@ public class PortalService {
     private final BillMapper billMapper;
     private final BillingTransactionMapper billingTransactionMapper;
     private final OperationLogMapper operationLogMapper;
+    private final CustomerCountryPriceMapper customerCountryPriceMapper;
     private final JwtUtils jwtUtils;
     private final PasswordEncoder passwordEncoder;
 
@@ -446,6 +447,24 @@ public class PortalService {
                 .orderByDesc(OperationLog::getCreatedAt);
         operationLogMapper.selectPage(p, wrapper);
         return PageResult.of(p.getRecords(), p.getTotal(), page, size);
+    }
+
+    // ===== Country Prices =====
+
+    public List<Map<String, Object>> getCountryPrices(Long customerId) {
+        List<CustomerCountryPrice> prices = customerCountryPriceMapper.selectList(
+                new LambdaQueryWrapper<CustomerCountryPrice>()
+                        .eq(CustomerCountryPrice::getCustomerId, customerId)
+                        .orderByAsc(CustomerCountryPrice::getCountryCode));
+        return prices.stream().map(p -> {
+            Map<String, Object> m = new HashMap<>();
+            m.put("countryCode", p.getCountryCode());
+            m.put("price", p.getPrice());
+            m.put("currency", p.getCurrency());
+            m.put("smsAttribute", p.getSmsAttribute() != null ? p.getSmsAttribute().name() : null);
+            m.put("billingMode", p.getBillingMode() != null ? p.getBillingMode().name() : null);
+            return m;
+        }).toList();
     }
 
     // ===== Helpers =====

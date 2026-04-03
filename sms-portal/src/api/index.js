@@ -30,6 +30,9 @@ export const billingAccount  = ()  => http.get('/portal/billing/account')
 export const billingTxList   = p   => http.get('/portal/billing/transactions', { params: p })
 export const billingBillList = p   => http.get('/portal/billing/bills', { params: p })
 
+// ==================== 国家报价 ====================
+export const countryPrices      = ()  => http.get('/portal/account/country-prices')
+
 // ==================== 账户 ====================
 export const accountInfo        = ()  => http.get('/portal/account/info')
 export const accountChangePwd   = d   => http.put('/portal/account/password', d)

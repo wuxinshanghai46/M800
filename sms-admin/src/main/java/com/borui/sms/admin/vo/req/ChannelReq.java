@@ -29,7 +29,9 @@ public class ChannelReq {
     // SMPP
     private String smppHost;
     private Integer smppPort = 2775;
+    @jakarta.validation.constraints.Size(max = 15, message = "SMPP system_id 最多15个字符")
     private String smppSystemId;
+    @jakarta.validation.constraints.Size(max = 8, message = "SMPP 密码最多8个字符（SMPP 3.4协议限制）")
     private String smppPassword;
     private String smppSystemType;
     private Integer smppWindowSize = 50;

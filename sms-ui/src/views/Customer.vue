@@ -691,6 +691,7 @@ import { ref, reactive, computed, onMounted } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { customerList, customerSave, customerUpdate, customerDetail, countryList as countryListApi, sidList, channelList } from '../api'
 import http from '../api/request'
+import isoCountries from '../data/countries'
 
 const headerStyle = { background: '#f0f2f5', color: '#374151', fontWeight: 600, fontSize: '12px' }
 const statusMap = { 0: '禁用', 1: '正常', 2: '已冻结', 3: '已销户' }
@@ -929,7 +930,15 @@ const newCountrySelection = ref(null)
 const selectedCountryObj = ref(null)
 
 const loadAllCountries = async () => {
-  try { const r = await countryListApi({ page: 1, size: 500 }); allCountries.value = r.data?.list || r.data || [] } catch { allCountries.value = [] }
+  try {
+    const r = await countryListApi({ page: 1, size: 500 })
+    const raw = r.data?.list || r.data || []
+    const localMap = Object.fromEntries(isoCountries.map(c => [c.code, c]))
+    allCountries.value = raw.map(c => {
+      const local = localMap[c.countryCode]
+      return local ? { ...c, countryName: local.name } : c
+    })
+  } catch { allCountries.value = [] }
 }
 
 // 过滤掉已开通的国家，避免重复开通

@@ -20,7 +20,7 @@ ALTER TABLE operation_log
     ADD COLUMN summary        VARCHAR(500)  DEFAULT ''               AFTER target_name,
     ADD COLUMN before_data    JSON          DEFAULT NULL             AFTER summary,
     ADD COLUMN after_data     JSON          DEFAULT NULL             AFTER before_data,
-    ADD COLUMN ip             VARCHAR(45)   DEFAULT ''               AFTER after_data,
+    MODIFY COLUMN ip          VARCHAR(45)   DEFAULT ''               ,
     ADD COLUMN user_agent     VARCHAR(500)  DEFAULT ''               AFTER ip,
     ADD COLUMN op_result      VARCHAR(10)   NOT NULL DEFAULT 'success' COMMENT 'success/failed' AFTER user_agent,
     ADD COLUMN error_message  VARCHAR(500)  DEFAULT ''               AFTER op_result,

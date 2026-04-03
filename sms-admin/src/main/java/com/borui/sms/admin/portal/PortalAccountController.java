@@ -97,6 +97,13 @@ public class PortalAccountController {
         return R.ok(result);
     }
 
+    // ===== 国家单价 =====
+
+    @GetMapping("/country-prices")
+    public R<java.util.List<Map<String, Object>>> countryPrices(@AuthenticationPrincipal PortalUser user) {
+        return R.ok(portalService.getCountryPrices(user.getCustomerId()));
+    }
+
     // ===== 操作日志 =====
 
     @GetMapping("/logs")

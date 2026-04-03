@@ -169,7 +169,7 @@
               <el-col :span="12"><el-form-item label="System ID（账号）"><el-input v-model="detail.smppSystemId" /></el-form-item></el-col>
             </el-row>
             <el-row :gutter="16">
-              <el-col :span="12"><el-form-item label="Password"><el-input v-model="detail.smppPassword" type="password" show-password /><div class="form-hint">加密存储，不明文展示</div></el-form-item></el-col>
+              <el-col :span="12"><el-form-item label="Password"><el-input v-model="detail.smppPassword" type="password" show-password :maxlength="8" /><div class="form-hint" :style="detail.smppPassword && detail.smppPassword.length > 8 ? 'color:#f56c6c' : ''">SMPP 协议限制最多 8 个字符（{{ detail.smppPassword ? detail.smppPassword.length : 0 }}/8）</div></el-form-item></el-col>
               <el-col :span="12"><el-form-item label="System Type"><el-input v-model="detail.smppSystemType" placeholder="可选" /></el-form-item></el-col>
             </el-row>
             <div class="section-title">协议参数</div>

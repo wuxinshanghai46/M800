@@ -73,7 +73,7 @@ import { portalLogout } from '../api'
 import { ElMessageBox } from 'element-plus'
 import {
   DataAnalysis, Promotion, List, Stamp, Document,
-  Wallet, Setting, ArrowDown, SwitchButton
+  Wallet, Setting, ArrowDown, SwitchButton, Money
 } from '@element-plus/icons-vue'
 
 const router = useRouter()
@@ -85,7 +85,8 @@ const menuItems = [
   { path: '/records',   label: '消息记录',         icon: List },
   { path: '/sid',       label: 'SID 管理',        icon: Stamp },
   { path: '/template',  label: '模板管理',         icon: Document },
-  { path: '/billing',   label: '账单',            icon: Wallet },
+  { path: '/billing',    label: '账单',            icon: Wallet },
+  { path: '/price-calc', label: '发送量估算',       icon: Money },
   { path: '/account',   label: '账户设置',         icon: Setting },
 ]
 

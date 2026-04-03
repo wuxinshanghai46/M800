@@ -18,7 +18,8 @@ const routes = [
       { path: 'records',   name: 'Records',     component: () => import('../views/Records.vue'),     meta: { title: '消息记录' } },
       { path: 'sid',       name: 'Sid',         component: () => import('../views/Sid.vue'),         meta: { title: 'SID 管理' } },
       { path: 'template',  name: 'Template',    component: () => import('../views/Template.vue'),    meta: { title: '模板管理' } },
-      { path: 'billing',   name: 'Billing',     component: () => import('../views/Billing.vue'),     meta: { title: '账单' } },
+      { path: 'billing',    name: 'Billing',     component: () => import('../views/Billing.vue'),     meta: { title: '账单' } },
+      { path: 'price-calc', name: 'PriceCalc',  component: () => import('../views/PriceCalc.vue'),   meta: { title: '发送量估算' } },
       { path: 'account',   name: 'Account',     component: () => import('../views/Account.vue'),     meta: { title: '账户设置' } },
     ]
   },
